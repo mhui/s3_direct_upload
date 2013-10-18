@@ -65,6 +65,7 @@ $.fn.S3Uploader = (options) ->
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
+        product = data.product
 
         callback_url = $uploadForm.data('callback-url')
         if callback_url
@@ -77,7 +78,7 @@ $.fn.S3Uploader = (options) ->
             contentType: "application/json"
             beforeSend: ( xhr, settings )       -> $uploadForm.trigger( 'ajax:beforeSend', [xhr, settings] )
             complete:   ( xhr, status )         -> $uploadForm.trigger( 'ajax:complete', [xhr, status] )
-            success:    ( data, status, xhr )   -> $uploadForm.trigger( 'ajax:success', [data, status, xhr] )
+            success:    ( data, status, xhr )   -> data.product = product; $uploadForm.trigger( 'ajax:success', [data, status, xhr] )
             error:      ( xhr, status, error )  -> $uploadForm.trigger( 'ajax:error', [xhr, status, error] )
 
         data.context.remove() if data.context && settings.remove_completed_progress_bar # remove progress bar
